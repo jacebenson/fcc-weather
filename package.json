@@ -1,0 +1,23 @@
+{
+  "name": "fcc04weather",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "browser-sync": "^2.23.6"
+  },
+  "scripts": {
+    "start": "./node_modules/.bin/browser-sync start --server 'public' --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/jacebenson/fcc-weather.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/jacebenson/fcc-weather/issues"
+  },
+  "homepage": "https://gitlab.com/jacebenson/fcc-weather#README"
+}
