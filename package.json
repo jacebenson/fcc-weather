@@ -8,16 +8,16 @@
     "browser-sync": "^2.23.6"
   },
   "scripts": {
-    "start": "./node_modules/.bin/browser-sync start --server 'public' --watch"
+    "start": "./node_modules/.bin/browser-sync start --server './public' --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/jacebenson/fcc-weather.git"
+    "url": "git+ssh://git@github.com/jacebenson/fcc-weather.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/jacebenson/fcc-weather/issues"
+    "url": "https://github.com/jacebenson/fcc-weather/issues"
   },
-  "homepage": "https://gitlab.com/jacebenson/fcc-weather#README"
+  "homepage": "https://github.com/jacebenson/fcc-weather#README"
 }
