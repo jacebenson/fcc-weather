@@ -5,10 +5,10 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "browser-sync": "^2.23.6"
+    "browser-sync": "^2.26.3"
   },
   "scripts": {
-    "start": "./node_modules/.bin/browser-sync start --server './public' --watch"
+    "start": "./node_modules/.bin/browser-sync start --server \"./public\" --watch"
   },
   "repository": {
     "type": "git",
