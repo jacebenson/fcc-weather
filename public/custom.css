@@ -1,11 +1,167 @@
 body {
-  background-size: 100%;
-  background-image: url(https://images.unsplash.com/photo-1453342664588-b702c83fc822?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=a560f94716cfdc4139963f4a04a38b5f);
-}
-.container {
-  text-align:center;
-  border-radius: 40px 40px 40px 40px;
-  background: rgba(200, 200, 200, 0.95);
-  margin-top:50px;
-  padding:20px;
-}
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #74b9ff, #0984e3);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    .weather-icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+    }
+    .location {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .description {
+      font-size: 18px;
+      margin: 10px 0;
+      text-transform: capitalize;
+    }
+    
+    .current-temp {
+      text-align: center;
+      margin: 25px 0;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .main-temp {
+      font-size: 72px;
+      font-weight: 100;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .temp-range {
+      font-size: 18px;
+      font-weight: 500;
+      opacity: 0.9;
+      letter-spacing: 2px;
+    }
+    .moon-phase {
+      font-size: 16px;
+      margin: 15px 0;
+    }
+    .weather-table {
+      margin: 20px 0;
+    }
+    .unit-comparison {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+    .unit-comparison th {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 12px 8px;
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .metric-header {
+      color: #ffffff;
+      background: rgba(0, 184, 148, 0.3);
+    }
+    .imperial-header {
+      color: #ffffff;
+      background: rgba(253, 121, 168, 0.3);
+    }
+    .unit-comparison td {
+      padding: 15px 10px;
+      font-size: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-weight: 500;
+    }
+    .metric {
+      background: rgba(0, 184, 148, 0.2);
+      border-left: 3px solid #00b894;
+    }
+    .imperial {
+      background: rgba(253, 121, 168, 0.2);
+      border-right: 3px solid #fd79a8;
+    }
+    .switch {
+      cursor: pointer;
+      font-size: 20px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    .switch:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(180deg);
+    }
+    .no-toggle {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .weather-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .day-section, .night-section {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px 15px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+    }
+    
+    .day-section {
+      background: linear-gradient(145deg, rgba(255, 193, 7, 0.15), rgba(255, 255, 255, 0.1));
+      border-left: 3px solid #ffc107;
+    }
+    
+    .night-section {
+      background: linear-gradient(145deg, rgba(63, 81, 181, 0.15), rgba(255, 255, 255, 0.1));
+      border-right: 3px solid #3f51b5;
+    }
+    
+    .section-header {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.9;
+    }
+    
+    .detail {
+      font-size: 14px;
+      margin: 8px 0;
+      font-weight: 500;
+      opacity: 0.95;
+    }
+    .loading {
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
