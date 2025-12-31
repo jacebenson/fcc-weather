@@ -30,13 +30,14 @@ async function getCurrentLocation() {
                         errorMessage = 'Location access denied by user';
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        errorMessage = 'Location information unavailable';
+                        errorMessage = 'Location service unavailable (Google API rate limit reached)';
                         break;
                     case error.TIMEOUT:
                         errorMessage = 'Location request timed out';
                         break;
                 }
                 console.log('❌ Error getting location:', errorMessage);
+                console.log('💡 Tip: The rate limit usually resets after an hour. Try again later or use a different network.');
                 reject(new Error(errorMessage));
             },
             {
@@ -62,6 +63,99 @@ async function getWeatherData(lat, lon) {
     } catch (error) {
         console.error('Error fetching weather data:', error);
         throw error;
+    }
+}
+
+async function geocodeCity(cityName) {
+    // Use OpenStreetMap's Nominatim API (free, no API key required)
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityName)}&format=json&limit=1`;
+    console.log('Geocoding city:', cityName);
+    
+    try {
+        let response = await fetch(url, {
+            headers: {
+                'User-Agent': 'WeatherApp/1.0'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Geocoding failed: ${response.status}`);
+        }
+        
+        let results = await response.json();
+        
+        if (results.length === 0) {
+            throw new Error('City not found. Please try again with a different name.');
+        }
+        
+        const location = results[0];
+        console.log('📍 Geocoded location:', location.display_name);
+        
+        return {
+            latitude: parseFloat(location.lat),
+            longitude: parseFloat(location.lon),
+            name: location.display_name
+        };
+    } catch (error) {
+        console.error('Error geocoding city:', error);
+        throw error;
+    }
+}
+
+function showLocationModal(isError = false) {
+    const modal = document.getElementById('locationModal');
+    const modalMessage = document.getElementById('modalMessage');
+    
+    if (isError) {
+        modalMessage.textContent = "Google's location service is unavailable. Please enter your city:";
+    } else {
+        modalMessage.textContent = "Please enter your city:";
+    }
+    
+    modal.style.display = 'flex';
+    document.getElementById('cityInput').focus();
+}
+
+function hideLocationModal() {
+    document.getElementById('locationModal').style.display = 'none';
+    document.getElementById('cityInput').value = '';
+    document.getElementById('locationError').style.display = 'none';
+}
+
+async function handleUserLocationInput() {
+    const cityInput = document.getElementById('cityInput').value.trim();
+    const errorElement = document.getElementById('locationError');
+    
+    if (!cityInput) {
+        errorElement.textContent = 'Please enter a city name';
+        errorElement.style.display = 'block';
+        return;
+    }
+    
+    try {
+        errorElement.style.display = 'none';
+        document.getElementById('location').textContent = '📍 Looking up location...';
+        document.getElementById('description').textContent = 'Please wait...';
+        
+        const location = await geocodeCity(cityInput);
+        
+        // Store in localStorage for next time
+        localStorage.setItem('userLocation', JSON.stringify({
+            latitude: location.latitude,
+            longitude: location.longitude,
+            name: cityInput
+        }));
+        
+        hideLocationModal();
+        
+        const weatherData = await getWeatherData(location.latitude, location.longitude);
+        const moonPhase = getDetailedMoonPhase();
+        updateWeatherDisplay(weatherData, moonPhase);
+        
+    } catch (error) {
+        errorElement.textContent = error.message;
+        errorElement.style.display = 'block';
+        console.error('Error processing location:', error);
     }
 }
 
@@ -111,6 +205,10 @@ function updateWeatherDisplay(weatherData, moonPhase) {
     // Location
     const locationElement = document.getElementById('location');
     locationElement.textContent = `📍 ${weatherData.name}, ${weatherData.sys.country}`;
+    
+    // Show the change location button
+    const changeLocationBtn = document.getElementById('changeLocationBtn');
+    changeLocationBtn.style.display = 'block';
     
     // Weather description with emoji
     const descriptionElement = document.getElementById('description');
@@ -197,6 +295,39 @@ function updateMinimalistDisplay(weatherData, moonPhase) {
 
 document.addEventListener("DOMContentLoaded", async function(event) {
     console.log("DOM fully loaded and parsed");
+    
+    // Set up location modal button handlers
+    document.getElementById('submitLocation').addEventListener('click', handleUserLocationInput);
+    document.getElementById('cancelLocation').addEventListener('click', hideLocationModal);
+    document.getElementById('cityInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            handleUserLocationInput();
+        }
+    });
+    
+    // Set up change location button
+    document.getElementById('changeLocationBtn').addEventListener('click', function() {
+        showLocationModal();
+    });
+    
+    // Check if user has a saved location preference
+    const savedLocation = localStorage.getItem('userLocation');
+    if (savedLocation) {
+        try {
+            const location = JSON.parse(savedLocation);
+            console.log('📍 Using saved location:', location.name);
+            document.getElementById('location').textContent = '📍 Loading saved location...';
+            
+            let weatherData = await getWeatherData(location.latitude, location.longitude);
+            let moonPhase = getDetailedMoonPhase();
+            updateWeatherDisplay(weatherData, moonPhase);
+            return;
+        } catch (error) {
+            console.error('Failed to use saved location:', error.message);
+            localStorage.removeItem('userLocation');
+        }
+    }
+    
     try {
         let currentLocation = await getCurrentLocation();
         let weatherData = await getWeatherData(currentLocation.latitude, currentLocation.longitude);
@@ -204,7 +335,24 @@ document.addEventListener("DOMContentLoaded", async function(event) {
         updateWeatherDisplay(weatherData, moonPhase);
     } catch (error) {
         console.error('Failed to get current location:', error.message);
-        document.getElementById('location').textContent = '❌ Location Error';
-        document.getElementById('description').textContent = error.message;
+        
+        // Show location input modal instead of using fallback
+        document.getElementById('location').textContent = '⚠️ Location Unavailable';
+        
+        if (error.message.includes('unavailable') || error.message.includes('rate limit')) {
+            document.getElementById('description').innerHTML = 
+                'Google location API limit exceeded.<br>' +
+                'Please enter your location manually.';
+        } else if (error.message.includes('denied')) {
+            document.getElementById('description').innerHTML = 
+                'Location permission denied.<br>' +
+                'Please enter your location manually.';
+        } else {
+            document.getElementById('description').innerHTML = 
+                error.message + '<br>Please enter your location manually.';
+        }
+        
+        // Show the location input modal with error message
+        showLocationModal(true);
     }
 });

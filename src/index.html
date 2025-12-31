@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weather</title>
+  <meta name="description" content="Weather App">
+  <link rel="canonical" href="/projects/freecodecamp/frontend/intermediate/weather/">
+  <style media="all" type="text/css">
+    @import "./custom.css";
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="weather-icon">
+      <img id="img" src="" style="width: 80px; height: 80px;" />
+    </div>
+    
+    <h1 id="location" class="location">
+      📍 Getting location...
+    </h1>
+    <button 
+      id="changeLocationBtn" 
+      style="display: none; margin: 10px auto; padding: 8px 16px; background: rgba(255,255,255,0.1); color: #ecf0f1; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; font-size: 14px; cursor: pointer; transition: all 0.3s;"
+      onmouseover="this.style.background='rgba(255,255,255,0.2)'"
+      onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+    >
+      🔄 Change Location
+    </button>
+    
+    <div id="description" class="description">⛅ Loading weather...</div>
+    
+    <div class="current-temp">
+      <div id="currentTemp" class="main-temp">--°</div>
+      <div id="tempRange" class="temp-range">H: --° L: --°</div>
+    </div>
+    
+    <div class="weather-grid">
+      <div class="day-section">
+        <div class="section-header">☀️ Day</div>
+        <div id="sunrise" class="detail">🌅 --:--</div>
+
+        <div id="humidity" class="detail">💧 --%</div>
+        <div id="windInfo" class="detail">💨 --</div>
+      </div>
+      
+      <div class="night-section">
+        <div class="section-header">💤 Eve</div>
+        <div id="sunset" class="detail">🌇 --:--</div>
+        <div id="moonPhase" class="detail">🌙 --</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Location Input Modal (hidden by default) -->
+  <div id="locationModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+    <div style="background: #2c3e50; padding: 30px; border-radius: 15px; max-width: 400px; width: 90%; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <h2 style="margin-top: 0; color: #ecf0f1; text-align: center;">📍 Enter Your Location</h2>
+      <p id="modalMessage" style="color: #bdc3c7; text-align: center; margin-bottom: 20px;">Please enter your city:</p>
+      <input 
+        type="text" 
+        id="cityInput" 
+        placeholder="e.g., Miami, FL or Tampa, Florida" 
+        style="width: 100%; padding: 12px; border: 2px solid #34495e; border-radius: 8px; font-size: 16px; box-sizing: border-box; background: #34495e; color: #ecf0f1;"
+      />
+      <div style="margin-top: 20px; display: flex; gap: 10px;">
+        <button 
+          id="submitLocation" 
+          style="flex: 1; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: bold;"
+        >Get Weather</button>
+        <button 
+          id="cancelLocation" 
+          style="padding: 12px 20px; background: #95a5a6; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;"
+        >Cancel</button>
+      </div>
+      <p id="locationError" style="color: #e74c3c; margin-top: 10px; text-align: center; display: none;"></p>
+    </div>
+  </div>
+
+  <script type="module" src="./custom.js"></script>
+</body>
+</html>

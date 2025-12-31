@@ -2,13 +2,15 @@
   "name": "fcc04weather",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "dependencies": {},
-  "devDependencies": {
-    "browser-sync": "^2.26.3"
-  },
+  "type": "module",
   "scripts": {
-    "start": "./node_modules/.bin/browser-sync start --server \"./public\" --watch"
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
   },
   "repository": {
     "type": "git",
